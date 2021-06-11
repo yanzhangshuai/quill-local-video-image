@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "removeComments": true,
+    "jsx": "preserve",
+    "jsxFactory": "h",
+    "experimentalDecorators": true,
+    "strictFunctionTypes": true,
+    "resolveJsonModule": true,
+    "declaration": false,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "lib": ["esnext", "dom"],
+    "sourceMap": false,
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": false,
+    "esModuleInterop": true,
+  },
+
+   //  类型声明文件的查找地址
+   "typeRoots": [
+    "node_modules/@types",
+    "src/@types"
+  ],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+}
