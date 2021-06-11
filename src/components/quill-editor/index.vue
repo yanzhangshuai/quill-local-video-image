@@ -11,7 +11,16 @@ import ImageUploader from './modules/image-uploader';
 Quill.register("modules/imageUploader", ImageUploader);
 Quill.register("modules/videoUploader", VideoUploader);
 export default defineComponent({
-    setup() {
+    props:{
+        value: {
+            type: String,
+            default: ''
+        }
+    },
+    emits: {
+        'update:value': (value: string) => value
+    },
+    setup(props, { emit }) {
 
         const quill = markRaw<{
             value: Quill
@@ -25,19 +34,19 @@ export default defineComponent({
 
             [{ 'header': 1 }, { 'header': 2 }],
             [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-            [{ 'direction': 'rtl' }],                         // text direction
+            [{ 'script': 'sub' }, { 'script': 'super' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],         
+            [{ 'direction': 'rtl' }],                        
 
-            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'size': ['small', false, 'large', 'huge'] }], 
             [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-            ['color', 'background'],          // dropdown with defaults from theme
+            ['color', 'background'],         
             ['font'],
             ['align'],
             ['image', 'video'],
 
-            ['clean']                                         // remove formatting button
+            ['clean']                                     
         ];
 
         const modules = {
@@ -46,41 +55,45 @@ export default defineComponent({
                 limit: 10 * 1024 * 1024,
                 limitError: () => alert('超过传输限制'),
                 upload: (file: File) => {
-                    quill.value.enable(false);
-                    return new Promise((resolve, reject) => {
+                    return new Promise((resolve) => {
                         setTimeout(() => {
-                            quill.value.enable(true);
                             resolve(
                                 "http://media.w3.org/2010/05/sintel/trailer.mp4"
                             );
-                        }, 3500);
+                        }, 5500);
                     });
                 },
-            }, 
+            },
             imageUploader: {
                 limit: 10 * 1024 * 1024,
                 limitError: () => alert('超过传输限制'),
                 upload: (file: File) => {
-                    quill.value.enable(false);
                     return new Promise((resolve, reject) => {
                         setTimeout(() => {
-                            quill.value.enable(true);
                             resolve(
-                                "http://pic37.nipic.com/20140113/8800276_184927469000_2.png"
+                                "https://avatars.githubusercontent.com/u/31086862?s=60&v=4"
                             );
-                        }, 3500);
+                        }, 9500);
                     });
                 },
             }
         }
 
         onMounted(() => {
-             quill.value = new Quill('#editor', {
+            quill.value = new Quill('#editor', {
                 theme: 'snow',
                 modules: modules
             });
 
-        })
+            quill.value.root.innerHTML = props.value || '';
+
+            quill.value.on('text-change', () => {
+                const html = quill.value.root.innerHTML;
+                emit('update:value', html);
+            })
+
+        });
+
         return {}
     }
 })
